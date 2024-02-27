@@ -1,0 +1,14 @@
+# Dependences
+/node_modules
+
+# Logs
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+*.log
+
+.DS_Store
+.env
+.env.test
+.env.production
