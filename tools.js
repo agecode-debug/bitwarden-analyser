@@ -2,15 +2,18 @@ import fs from "fs/promises";
 import os from "os";
 import path from "path";
 
-async function isValidPasswordFileName(name) {
+async function checkPasswordFileName(name) {
   const passManagersFiles = await fs.readdir("./passmanagers");
-  const results = await Promise.all(
+  const checks = await Promise.all(
     passManagersFiles.map(async (fileName) => {
       const file = await import(`./passmanagers/${fileName}`);
-      return file.default.info.modelName.test(name);
+      if (file.default.info.modelName.test(name)) {
+        return { passManager: path.parse(fileName).name };
+      }
+      return null;
     }),
   );
-  return results.some((result) => result);
+  return checks.find((check) => check);
 }
 
 async function searchPasswordFiles() {
@@ -27,10 +30,15 @@ async function searchPasswordFiles() {
         if (file.startsWith(".")) return;
         const filePath = path.join(dir, file);
         try {
+          const passwordFileInfo = await checkPasswordFileName(fileName);
           if ((await fs.stat(filePath)).isDirectory()) {
             await searchFiles(filePath);
-          } else if (await isValidPasswordFileName(fileName)) {
-            passwordFiles.push(filePath);
+          } else if (passwordFileInfo) {
+            passwordFiles.push({
+              path: filePath,
+              name: fileName,
+              passManager: passwordFileInfo.passManager,
+            });
           }
         } catch (error) {
           errors.push(error);
