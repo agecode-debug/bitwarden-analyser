@@ -4,16 +4,17 @@ import path from "path";
 
 async function checkPasswordFileName(name) {
   const passManagersFiles = await fs.readdir("./passmanagers");
-  const checks = await Promise.all(
+  const results = await Promise.all(
     passManagersFiles.map(async (fileName) => {
       const file = await import(`./passmanagers/${fileName}`);
-      if (file.default.info.modelName.test(name)) {
+      const regex = new RegExp(file.default.info.modelName.source);
+      if (regex.test(name)) {
         return { passManager: path.parse(fileName).name };
       }
       return null;
     }),
   );
-  return checks.find((check) => check);
+  return results.find((result) => result !== null);
 }
 
 async function searchPasswordFiles() {
@@ -51,4 +52,4 @@ async function searchPasswordFiles() {
   return { passwordFiles, errors };
 }
 
-export default searchPasswordFiles;
+export default { searchPasswordFiles, checkPasswordFileName };
