@@ -52,4 +52,4 @@ async function searchPasswordFiles() {
   return { passwordFiles, errors };
 }
 
-export default { searchPasswordFiles, checkPasswordFileName };
+export { searchPasswordFiles, checkPasswordFileName };
