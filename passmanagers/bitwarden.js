@@ -4,4 +4,12 @@ const info = {
   modelName: /bitwarden_export_\d+/g,
 };
 
-export default { info };
+function format(data) {
+  return {
+    passwords: data.items.map((item) => ({
+      password: item?.login?.password,
+    })),
+  };
+}
+
+export { info, format };

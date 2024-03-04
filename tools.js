@@ -7,7 +7,7 @@ async function checkPasswordFileName(name) {
   const results = await Promise.all(
     passManagersFiles.map(async (fileName) => {
       const file = await import(`./passmanagers/${fileName}`);
-      const regex = new RegExp(file.default.info.modelName.source);
+      const regex = new RegExp(file.info.modelName.source);
       if (regex.test(name)) {
         return { passManager: path.parse(fileName).name };
       }
@@ -52,4 +52,17 @@ async function searchPasswordFiles() {
   return { passwordFiles, errors };
 }
 
-export { searchPasswordFiles, checkPasswordFileName };
+function analyze(data) {
+  // show the duplicate passwords
+  const duplicates = {};
+  data.passwords.forEach((password) => {
+    if (duplicates[password.password]) {
+      duplicates[password.password] += 1;
+    } else {
+      duplicates[password.password] = 1;
+    }
+  });
+  return duplicates;
+}
+
+export { searchPasswordFiles, checkPasswordFileName, analyze };

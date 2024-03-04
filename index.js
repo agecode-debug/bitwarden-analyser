@@ -2,7 +2,12 @@ import { Command } from "commander";
 import ora from "ora";
 import inquirer from "inquirer";
 import path from "path";
-import { searchPasswordFiles, checkPasswordFileName } from "./tools.js";
+import fs from "fs/promises";
+import {
+  searchPasswordFiles,
+  checkPasswordFileName,
+  analyze,
+} from "./tools.js";
 
 const program = new Command();
 program.name("passwords-analyser");
@@ -19,7 +24,7 @@ async function getPasswordFileFromList(passwordFiles) {
       choices: passwordFiles.map((file) => file.name),
     },
   ]);
-  return passwordFiles.find((file) => file.name === passwordFileName.name).path;
+  return passwordFiles.find((file) => file.name === passwordFileName.name);
 }
 
 async function getPasswordFileFromPath() {
@@ -63,6 +68,13 @@ async function main() {
     );
     passwordFile = await getPasswordFileFromPath();
   }
+  const { format } = await import(
+    `./passmanagers/${passwordFile.passManager}.js`
+  );
+  const fileContent = await fs.readFile(passwordFile.path);
+  const jsonData = JSON.parse(fileContent);
+  const results = analyze(format(jsonData));
+  console.log(results);
 }
 
 main();
