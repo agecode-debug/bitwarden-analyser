@@ -52,17 +52,19 @@ async function searchPasswordFiles() {
   return { passwordFiles, errors };
 }
 
-function analyze(data) {
-  // show the duplicate passwords
-  const duplicates = {};
-  data.passwords.forEach((password) => {
-    if (duplicates[password.password]) {
-      duplicates[password.password] += 1;
-    } else {
-      duplicates[password.password] = 1;
-    }
+function analyze(datas) {
+  // count in an array the duplicate passwords, with item containing the number of duplicated password in "count" and the password in "password"
+  const duplicates = [];
+  datas.passwords.forEach((data) => {
+    if (duplicates.some((item) => item.password === data.password)) return;
+    duplicates.push({
+      password: data.password,
+      count: datas.passwords.filter((item) => item.password === data.password)
+        .length,
+    });
   });
-  return duplicates;
+  const compareFunction = (a, b) => b.count - a.count;
+  return duplicates.sort(compareFunction);
 }
 
 export { searchPasswordFiles, checkPasswordFileName, analyze };

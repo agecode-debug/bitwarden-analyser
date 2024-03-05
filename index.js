@@ -51,7 +51,6 @@ async function getPasswordFileFromPath() {
 
 async function main() {
   const { passwordFiles } = await searchPasswordFiles();
-  console.log(passwordFiles);
 
   let passwordFile;
 
@@ -61,7 +60,6 @@ async function main() {
   } else if (passwordFiles.length > 1) {
     loading.succeed("Passwords files found ! Please choose one");
     passwordFile = await getPasswordFileFromList(passwordFiles);
-    console.log(passwordFile);
   } else {
     loading.warn(
       "No passwords files found ! Please manually specify the path to your passwords files.",
