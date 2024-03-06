@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import os from "os";
 import path from "path";
+import zxcvbn from "zxcvbn";
 
 async function checkPasswordFileName(name) {
   const passManagersFiles = await fs.readdir("./passmanagers");
