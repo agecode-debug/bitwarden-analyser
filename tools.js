@@ -62,6 +62,7 @@ function analyze(datas) {
       password: data.password,
       count: datas.passwords.filter((item) => item.password === data.password)
         .length,
+      score: data.password ? zxcvbn(data.password).score : "N/A",
     });
   });
   const compareFunction = (a, b) => b.count - a.count;
