@@ -8,6 +8,7 @@ function format(data) {
   return {
     passwords: data.items.map((item) => ({
       password: item?.login?.password,
+      urls: item?.login?.uris?.map((uri) => uri.uri),
     })),
   };
 }
