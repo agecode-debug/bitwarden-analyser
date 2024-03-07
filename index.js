@@ -58,7 +58,7 @@ async function main() {
     loading.succeed("Passwords file found !");
     passwordFile = passwordFiles[0].path;
   } else if (passwordFiles.length > 1) {
-    loading.succeed("Passwords files found ! Please choose one");
+    loading.succeed("Multiples passwords files found ! Please choose one");
     passwordFile = await getPasswordFileFromList(passwordFiles);
   } else {
     loading.warn(
