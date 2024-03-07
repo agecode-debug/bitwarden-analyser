@@ -7,6 +7,7 @@ import {
   searchPasswordFiles,
   checkPasswordFileName,
   analyze,
+  formatResults,
 } from "./tools.js";
 
 const program = new Command();
@@ -72,7 +73,7 @@ async function main() {
   const fileContent = await fs.readFile(passwordFile.path);
   const jsonData = JSON.parse(fileContent);
   const results = analyze(format(jsonData));
-  console.log(results);
+  console.log(formatResults(results));
 }
 
 main();

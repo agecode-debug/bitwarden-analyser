@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import os from "os";
 import path from "path";
 import zxcvbn from "zxcvbn";
+import { table } from "table";
 
 async function checkPasswordFileName(name) {
   const passManagersFiles = await fs.readdir("./passmanagers");
@@ -69,4 +70,19 @@ function analyze(datas) {
   return duplicates.sort(compareFunction);
 }
 
-export { searchPasswordFiles, checkPasswordFileName, analyze };
+function formatResults(results) {
+  // format the results to display them in a table
+  const data = [["Password", "Count", "Score"]];
+  results.forEach((result) => {
+    data.push([
+      result.password?.length > 10
+        ? `${result.password?.substring(0, 10)}...`
+        : result.password,
+      result.count,
+      result.score,
+    ]);
+  });
+  return table(data);
+}
+
+export { searchPasswordFiles, checkPasswordFileName, analyze, formatResults };
