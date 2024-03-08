@@ -9,6 +9,7 @@ import {
   analyze,
   formatResults,
 } from "./tools.js";
+import startServer from "./server.js";
 
 const program = new Command();
 program.name("passwords-analyser");
@@ -72,8 +73,13 @@ async function main() {
   );
   const fileContent = await fs.readFile(passwordFile.path);
   const jsonData = JSON.parse(fileContent);
+  const loadingAnalysis = ora("Analyzing passwords").start();
   const results = analyze(format(jsonData));
-  console.log(formatResults(results));
+  loadingAnalysis.succeed("Analysis done !");
+  const loadingServer = ora("Starting server").start();
+  startServer(results);
+  loadingServer.succeed("Server started !");
+  console.log("You can now see the results on http://localhost:3000");
 }
 
 main();
