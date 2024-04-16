@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { program } from "commander";
 import ora from "ora";
 import inquirer from "inquirer";
 import path from "path";
@@ -11,15 +11,11 @@ import {
 } from "./tools.js";
 import startServer from "./server.js";
 
-const program = new Command();
-program.name("passwords-analyser");
-program.description("A tool to analyze your passwords");
-program.version("1.0.0");
 program
-  .options("-p, --path <path>", "Path to your password file")
-  .options("-e, --export <name>", "Export the results to a file")
-  .options("-p, --port <port>", "Port to start the server on")
-  .options("--no-server", "Do not start the server");
+  .option("-p, --path <path>", "Path to your password file")
+  .option("-e, --export <name>", "Export the results to a file")
+  .option("-P, --port <port>", "Port to start the server on")
+  .option("--no-server", "Do not start the server");
 program.parse();
 
 // Create a loading spinner
