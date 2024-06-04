@@ -7,7 +7,6 @@ import {
   searchPasswordFiles,
   checkPasswordFileName,
   analyze,
-  formatResults,
 } from "./tools.js";
 import startServer from "./server.js";
 
@@ -79,7 +78,7 @@ async function main() {
 
     if (passwordFiles.length === 1) {
       loading.succeed("Passwords file found !");
-      passwordFile = passwordFiles[0].path;
+      [passwordFile] = passwordFiles;
     } else if (passwordFiles.length > 1) {
       loading.succeed("Multiples passwords files found ! Please choose one");
       passwordFile = await getPasswordFileFromList(passwordFiles);
