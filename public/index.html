@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passwords analysis results</title>
+</head>
+<body>
+    <p id="passwords"></p>
+    <script>
+        window.onload = function() {
+            const p = document.getElementById('passwords');
+            fetch('http://localhost:3000/passwords')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    p.innerHTML = data.map(password => `<p>${password.password}</p>`).join('');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
